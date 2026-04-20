@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flow — Organise ta discipline.</title>
+  <meta name="description" content="Flow : habits, tâches, pomodoro, planning et statistiques. Construis ta constance." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+
+  <!-- Gradient orbs background -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- ── NAVBAR ─────────────────────────────────────────── -->
+  <nav class="navbar" role="navigation" aria-label="Navigation principale">
+    <a href="#" class="nav-logo" aria-label="Flow - Accueil">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+      </svg>
+      FLOW
+    </a>
+    <div class="nav-center">
+      <a href="#features" class="nav-link" data-i18n="nav.features">Fonctionnalités</a>
+      <a href="#pricing" class="nav-link" data-i18n="nav.pricing">Tarifs</a>
+    </div>
+    <div class="nav-right">
+      <div class="lang-picker" role="listbox" aria-label="Langue">
+        <button class="lang-btn active" data-lang="fr" role="option" aria-selected="true">🇫🇷 FR</button>
+        <button class="lang-btn" data-lang="en" role="option" aria-selected="false">🇬🇧 EN</button>
+        <button class="lang-btn" data-lang="es" role="option" aria-selected="false">🇪🇸 ES</button>
+        <button class="lang-btn" data-lang="pt" role="option" aria-selected="false">🇧🇷 PT</button>
+      </div>
+      <button class="btn btn-ghost" id="btn-login" aria-haspopup="dialog" data-i18n="nav.login">Se connecter</button>
+      <button class="btn btn-primary" id="btn-signup" aria-haspopup="dialog" data-i18n="nav.signup">S'inscrire</button>
+    </div>
+    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Menu mobile" hidden>
+    <a href="#features" class="mobile-link" data-i18n="nav.features">Fonctionnalités</a>
+    <a href="#pricing" class="mobile-link" data-i18n="nav.pricing">Tarifs</a>
+    <button class="btn btn-ghost w-full" id="m-btn-login" data-i18n="nav.login">Se connecter</button>
+    <button class="btn btn-primary w-full" id="m-btn-signup" data-i18n="nav.signup">S'inscrire</button>
+  </div>
+
+  <!-- ── HERO ───────────────────────────────────────────── -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <div class="hero-badge reveal" data-delay="0">
+        <span class="badge-dot"></span>
+        <span data-i18n="hero.badge">Productivité personnelle</span>
+      </div>
+      <h1 class="hero-title reveal" data-delay="100">
+        <span data-i18n="hero.title1">Organise ta discipline.</span><br/>
+        <span class="gradient-text" data-i18n="hero.title2">Construis ta constance.</span>
+      </h1>
+      <p class="hero-sub reveal" data-delay="200" data-i18n="hero.subtitle">
+        Habits, tâches, focus, planning et statistiques — tout ce qu'il faut pour avancer chaque jour, dans une seule app.
+      </p>
+      <div class="hero-ctas reveal" data-delay="300">
+        <button class="btn btn-primary btn-lg" id="hero-signup" aria-haspopup="dialog" data-i18n="hero.cta.primary">
+          S'inscrire gratuitement
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <button class="btn btn-outline btn-lg" id="hero-login" aria-haspopup="dialog" data-i18n="hero.cta.secondary">Se connecter</button>
+      </div>
+      <div class="hero-stats reveal" data-delay="400" role="list">
+        <div class="stat-item" role="listitem">
+          <span class="stat-number">7</span>
+          <span class="stat-label" data-i18n="stats.modules">Modules</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-number">100%</span>
+          <span class="stat-label" data-i18n="stats.offline">Offline</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-number">4</span>
+          <span class="stat-label" data-i18n="stats.languages">Langues</span>
+        </div>
+        <div class="stat-divider" aria-hidden="true"></div>
+        <div class="stat-item" role="listitem">
+          <span class="stat-number">∞</span>
+          <span class="stat-label" data-i18n="stats.habits">Habitudes</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FEATURES ───────────────────────────────────────── -->
+  <section class="features" id="features" aria-labelledby="features-title">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="eyebrow" data-i18n="features.eyebrow">Ce que tu obtiens</p>
+        <h2 id="features-title" data-i18n="features.title">Tout ce dont tu as besoin.<br/><span class="gradient-text">Rien de superflu.</span></h2>
+      </div>
+      <div class="bento-grid">
+
+        <div class="bento-card bento-large reveal" data-delay="0">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+          </div>
+          <h3 data-i18n="feat.habits.title">Suivi des habitudes</h3>
+          <p data-i18n="feat.habits.desc">Quotidiennes, hebdomadaires, mensuelles. Streaks visuels et progression en temps réel.</p>
+          <div class="card-visual habits-visual" aria-hidden="true">
+            <div class="habit-dots">
+              <span class="dot done"></span><span class="dot done"></span><span class="dot done"></span>
+              <span class="dot done"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+            <div class="habit-bar"><div class="habit-bar-fill" style="width:71%"></div></div>
+          </div>
+        </div>
+
+        <div class="bento-card reveal" data-delay="100">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          </div>
+          <h3 data-i18n="feat.tasks.title">Gestionnaire de tâches</h3>
+          <p data-i18n="feat.tasks.desc">Vision hebdomadaire, priorités et points de progression.</p>
+        </div>
+
+        <div class="bento-card reveal" data-delay="150">
+          <div class="card-icon card-icon--warn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3 data-i18n="feat.pomodoro.title">Timer Pomodoro</h3>
+          <p data-i18n="feat.pomodoro.desc">Sessions focus avec chronomètre intégré et pauses guidées.</p>
+        </div>
+
+        <div class="bento-card reveal" data-delay="200">
+          <div class="card-icon card-icon--success">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <h3 data-i18n="feat.planning.title">Planning hebdomadaire</h3>
+          <p data-i18n="feat.planning.desc">Vue calendrier style Apple pour organiser ta semaine.</p>
+        </div>
+
+        <div class="bento-card bento-wide reveal" data-delay="250">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3 data-i18n="feat.stats.title">Statistiques visuelles</h3>
+          <p data-i18n="feat.stats.desc">Graphique 30 jours, heatmap de régularité et taux de réussite par habitude.</p>
+          <div class="mini-chart" aria-hidden="true">
+            <div class="bar" style="height:40%"></div><div class="bar" style="height:65%"></div>
+            <div class="bar" style="height:50%"></div><div class="bar" style="height:80%"></div>
+            <div class="bar" style="height:60%"></div><div class="bar" style="height:90%"></div>
+            <div class="bar" style="height:75%"></div><div class="bar active" style="height:95%"></div>
+          </div>
+        </div>
+
+        <div class="bento-card reveal" data-delay="300">
+          <div class="card-icon card-icon--gold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3 data-i18n="feat.rewards.title">Système de récompenses</h3>
+          <p data-i18n="feat.rewards.desc">Gagne des points et débloque des récompenses personnalisables.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PRICING ────────────────────────────────────────── -->
+  <section class="pricing" id="pricing" aria-labelledby="pricing-title">
+    <div class="container">
+      <div class="section-header reveal">
+        <p class="eyebrow" data-i18n="pricing.eyebrow">Nos offres</p>
+        <h2 id="pricing-title" data-i18n="pricing.title">Choisis ton plan.<br/><span class="gradient-text" data-i18n="pricing.subtitle">Commence gratuitement.</span></h2>
+      </div>
+      <div class="pricing-grid">
+
+        <div class="price-card reveal" data-delay="0">
+          <p class="plan-name" data-i18n="plan.original.name">Flow Original</p>
+          <div class="plan-price"><span class="price-amount">3,99€</span><span class="price-period" data-i18n="plan.per_month">/mois</span></div>
+          <ul class="plan-features" aria-label="Fonctionnalités incluses">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.core">Toutes les fonctionnalités core</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.habits">Habitudes illimitées</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.planning">Planning hebdomadaire</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.pomodoro">Timer Pomodoro</span></li>
+          </ul>
+          <button class="btn btn-outline w-full" data-i18n="plan.cta.start">Commencer</button>
+          <p class="plan-note" data-i18n="plan.stripe">Paiement sécurisé · Stripe</p>
+        </div>
+
+        <div class="price-card price-card--featured reveal" data-delay="100">
+          <div class="plan-badge" data-i18n="plan.popular">⚡ Populaire</div>
+          <p class="plan-name" data-i18n="plan.pro.name">Flow Pro</p>
+          <div class="plan-price"><span class="price-amount">7,99€</span><span class="price-period" data-i18n="plan.per_month">/mois</span></div>
+          <ul class="plan-features" aria-label="Fonctionnalités incluses">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.pro_all">Tout Flow Original</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.stats">Statistiques avancées</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.shop">Boutique de récompenses</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.sync">Sync multi-appareils</span></li>
+          </ul>
+          <button class="btn btn-primary w-full" data-i18n="plan.cta.start">Commencer</button>
+          <p class="plan-note" data-i18n="plan.stripe">Paiement sécurisé · Stripe</p>
+        </div>
+
+        <div class="price-card reveal" data-delay="200">
+          <p class="plan-name" data-i18n="plan.premium.name">Flow Premium</p>
+          <div class="plan-price"><span class="price-amount">58,70€</span><span class="price-period" data-i18n="plan.per_year">/an</span></div>
+          <p class="plan-savings" data-i18n="plan.saves">Économise 37%</p>
+          <ul class="plan-features" aria-label="Fonctionnalités incluses">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.prem_all">Tout Flow Pro</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.early">Accès anticipé</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.export">Export de données</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.themes">Thèmes personnalisés</span></li>
+          </ul>
+          <button class="btn btn-outline w-full" data-i18n="plan.cta.start">Commencer</button>
+          <p class="plan-note" data-i18n="plan.stripe">Paiement sécurisé · Stripe</p>
+        </div>
+
+        <div class="price-card price-card--life reveal" data-delay="300">
+          <p class="plan-name" data-i18n="plan.life.name">Flow Life</p>
+          <div class="plan-price"><span class="price-amount">100€</span><span class="price-period" data-i18n="plan.one_time">unique</span></div>
+          <ul class="plan-features" aria-label="Fonctionnalités incluses">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.lifetime">Accès à vie complet</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.updates">Toutes les mises à jour</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.vip">Support VIP</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="plan.feat.exclusive">Fonctions exclusives</span></li>
+          </ul>
+          <button class="btn btn-outline w-full" data-i18n="plan.cta.lifetime">Accès à vie</button>
+          <p class="plan-note" data-i18n="plan.stripe">Paiement sécurisé · Stripe</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ─────────────────────────────────────────── -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <a href="#" class="footer-logo" aria-label="Flow">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        FLOW
+      </a>
+      <p class="footer-note" data-i18n="footer.note">Conçu pour la discipline personnelle — 100% local, 0 tracking.</p>
+    </div>
+  </footer>
+
+  <!-- ── MODAL LOGIN ────────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-login" role="dialog" aria-modal="true" aria-labelledby="login-title" hidden>
+    <div class="modal">
+      <button class="modal-close" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h2 id="login-title" data-i18n="modal.login.title">Content de te revoir.</h2>
+      <p data-i18n="modal.login.sub">Connecte-toi pour accéder à ton espace.</p>
+      <form id="form-login" novalidate>
+        <div class="form-group">
+          <label for="login-email" data-i18n="form.email">Email</label>
+          <input type="email" id="login-email" name="email" autocomplete="email" required placeholder="toi@exemple.com" />
+        </div>
+        <div class="form-group">
+          <label for="login-pass" data-i18n="form.password">Mot de passe</label>
+          <input type="password" id="login-pass" name="password" autocomplete="current-password" required placeholder="••••••••" />
+        </div>
+        <div class="form-error" id="login-error" role="alert" aria-live="polite"></div>
+        <button type="submit" class="btn btn-primary w-full" id="login-submit">
+          <span data-i18n="modal.login.cta">Se connecter</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+      <p class="modal-switch">
+        <span data-i18n="modal.login.switch">Pas encore de compte ?</span>
+        <button class="link-btn" id="switch-to-signup" data-i18n="modal.login.switch_cta">S'inscrire</button>
+      </p>
+    </div>
+  </div>
+
+  <!-- ── MODAL SIGNUP ───────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-signup" role="dialog" aria-modal="true" aria-labelledby="signup-title" hidden>
+    <div class="modal">
+      <button class="modal-close" aria-label="Fermer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h2 id="signup-title" data-i18n="modal.signup.title">Crée ton compte.</h2>
+      <p data-i18n="modal.signup.sub">Gratuit, sans carte bancaire, pour toujours.</p>
+      <form id="form-signup" novalidate>
+        <div class="form-group">
+          <label for="signup-email" data-i18n="form.email">Email</label>
+          <input type="email" id="signup-email" name="email" autocomplete="email" required placeholder="toi@exemple.com" />
+        </div>
+        <div class="form-group">
+          <label for="signup-pass" data-i18n="form.password">Mot de passe</label>
+          <input type="password" id="signup-pass" name="password" autocomplete="new-password" required placeholder="••••••••" />
+        </div>
+        <div class="form-group">
+          <label for="signup-confirm" data-i18n="form.confirm_password">Confirmer le mot de passe</label>
+          <input type="password" id="signup-confirm" name="confirm" autocomplete="new-password" required placeholder="••••••••" />
+        </div>
+        <div class="form-error" id="signup-error" role="alert" aria-live="polite"></div>
+        <button type="submit" class="btn btn-primary w-full" id="signup-submit">
+          <span data-i18n="modal.signup.cta">Créer mon compte</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+      <p class="modal-switch">
+        <span data-i18n="modal.signup.switch">Déjà un compte ?</span>
+        <button class="link-btn" id="switch-to-login" data-i18n="modal.signup.switch_cta">Se connecter</button>
+      </p>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="index.js"></script>
+</body>
+</html>
