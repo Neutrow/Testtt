@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flow — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body class="app-body">
+
+  <!-- ── TOPBAR ──────────────────────────────────────────── -->
+  <header class="topbar" role="banner">
+    <button class="burger-app" id="burger-app" aria-label="Menu" aria-expanded="false" aria-controls="sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <div class="topbar-right">
+      <span class="user-email" id="user-email"></span>
+      <div class="lang-picker">
+        <button class="lang-btn active" data-lang="fr">🇫🇷</button>
+        <button class="lang-btn" data-lang="en">🇬🇧</button>
+        <button class="lang-btn" data-lang="es">🇪🇸</button>
+        <button class="lang-btn" data-lang="pt">🇧🇷</button>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="btn-logout" aria-label="Se déconnecter">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        <span data-i18n="app.logout">Se déconnecter</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Navigation">
+    <a href="index.html" class="sidebar-logo" aria-label="Flow - Accueil">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+      FLOW
+    </a>
+    <p class="sidebar-section-label" data-i18n="sidebar.main">Principal</p>
+    <nav class="sidebar-nav">
+      <button class="nav-item active" data-page="overview" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span data-i18n="nav.overview">Vue d'ensemble</span>
+      </button>
+      <button class="nav-item" data-page="habits">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+        <span data-i18n="nav.habits">Habitudes</span>
+      </button>
+      <button class="nav-item" data-page="tasks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+        <span data-i18n="nav.tasks">Tâches</span>
+      </button>
+      <button class="nav-item" data-page="shop">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+        <span data-i18n="nav.shop">Boutique</span>
+      </button>
+      <button class="nav-item" data-page="stats">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        <span data-i18n="nav.stats">Statistiques</span>
+      </button>
+      <button class="nav-item" data-page="pomodoro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span data-i18n="nav.pomodoro">Pomodoro</span>
+      </button>
+      <button class="nav-item" data-page="planning">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span data-i18n="nav.planning">Planning</span>
+      </button>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="points-badge" id="sidebar-points">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span id="points-value">0</span> pts
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Changer de thème">
+        <svg id="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" id="sidebar-overlay" hidden></div>
+
+  <!-- ── MAIN CONTENT ────────────────────────────────────── -->
+  <main class="app-main" id="app-main">
+
+    <!-- PAGE: OVERVIEW -->
+    <div class="page active" id="page-overview">
+      <div class="page-header">
+        <h1 id="greeting" data-i18n="page.overview.title">Bonjour</h1>
+        <p class="page-date" id="today-date"></p>
+      </div>
+      <div class="overview-grid">
+        <div class="ov-card ov-progress">
+          <p class="card-label" data-i18n="ov.daily_progress">Progression du jour</p>
+          <div class="ring-wrap" role="img" aria-label="Progression du jour">
+            <svg class="ring-svg" viewBox="0 0 100 100">
+              <circle class="ring-track" cx="50" cy="50" r="40"/>
+              <circle class="ring-fill" id="ring-fill" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2"/>
+            </svg>
+            <span class="ring-pct" id="ring-pct">0%</span>
+          </div>
+          <div class="progress-rows">
+            <div class="prog-row">
+              <span data-i18n="ov.habits">Habitudes</span>
+              <div class="prog-bar"><div class="prog-fill" id="prog-habits" style="width:0%"></div></div>
+            </div>
+            <div class="prog-row">
+              <span data-i18n="ov.tasks">Tâches</span>
+              <div class="prog-bar"><div class="prog-fill" id="prog-tasks" style="width:0%"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="ov-card ov-score">
+          <p class="card-label" data-i18n="ov.score">Score du jour</p>
+          <div class="score-display" id="daily-score">0</div>
+          <p class="score-unit" data-i18n="ov.points">points accumulés</p>
+        </div>
+        <div class="ov-card ov-habits-snap">
+          <div class="snap-header">
+            <p class="card-label" data-i18n="ov.today_habits">Habitudes du jour</p>
+            <button class="btn btn-ghost btn-sm" data-page-link="habits" data-i18n="ov.see_all">Voir tout</button>
+          </div>
+          <ul class="snap-list" id="snap-habits" aria-label="Habitudes du jour"></ul>
+          <p class="snap-empty" id="snap-habits-empty" hidden data-i18n="ov.no_habits">Aucune habitude pour aujourd'hui.</p>
+        </div>
+        <div class="ov-card ov-tasks-snap">
+          <div class="snap-header">
+            <p class="card-label" data-i18n="ov.today_tasks">Tâches du jour</p>
+            <button class="btn btn-ghost btn-sm" data-page-link="tasks" data-i18n="ov.see_all">Voir tout</button>
+          </div>
+          <ul class="snap-list" id="snap-tasks" aria-label="Tâches du jour"></ul>
+          <p class="snap-empty" id="snap-tasks-empty" hidden data-i18n="ov.no_tasks">Aucune tâche pour aujourd'hui.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE: HABITS -->
+    <div class="page" id="page-habits">
+      <div class="page-header">
+        <div>
+          <h1 data-i18n="page.habits.title">Habitudes</h1>
+          <p class="page-sub" data-i18n="page.habits.sub">Vos routines quotidiennes, hebdomadaires et mensuelles.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" id="btn-add-habit" aria-haspopup="dialog">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span data-i18n="habit.add">Ajouter</span>
+        </button>
+      </div>
+      <div class="tab-bar" role="tablist">
+        <button class="tab active" role="tab" data-filter="all" aria-selected="true" data-i18n="filter.all">Toutes</button>
+        <button class="tab" role="tab" data-filter="daily" data-i18n="filter.daily">Quotidiennes</button>
+        <button class="tab" role="tab" data-filter="weekly" data-i18n="filter.weekly">Hebdomadaires</button>
+        <button class="tab" role="tab" data-filter="monthly" data-i18n="filter.monthly">Mensuelles</button>
+      </div>
+      <ul class="item-list" id="habits-list" aria-label="Liste des habitudes"></ul>
+      <p class="list-empty" id="habits-empty" hidden data-i18n="habit.empty">Aucune habitude. Ajoutez-en une !</p>
+    </div>
+
+    <!-- PAGE: TASKS -->
+    <div class="page" id="page-tasks">
+      <div class="page-header">
+        <div>
+          <h1 data-i18n="page.tasks.title">Tâches</h1>
+          <p class="page-sub" data-i18n="page.tasks.sub">Vision hebdomadaire de vos to-dos.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" id="btn-add-task" aria-haspopup="dialog">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span data-i18n="task.add">Nouvelle tâche</span>
+        </button>
+      </div>
+      <div class="week-grid" id="week-grid" role="grid" aria-label="Semaine courante"></div>
+      <h2 class="section-title" data-i18n="tasks.all">Toutes les tâches</h2>
+      <ul class="item-list" id="tasks-list" aria-label="Liste des tâches"></ul>
+      <p class="list-empty" id="tasks-empty" hidden data-i18n="task.empty">Aucune tâche. Ajoutez-en une !</p>
+    </div>
+
+    <!-- PAGE: SHOP -->
+    <div class="page" id="page-shop">
+      <div class="page-header">
+        <div>
+          <h1 data-i18n="page.shop.title">Boutique</h1>
+          <p class="page-sub" data-i18n="page.shop.sub">Dépensez vos points sur des récompenses.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" id="btn-add-reward" aria-haspopup="dialog">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span data-i18n="reward.add">Ajouter</span>
+        </button>
+      </div>
+      <div class="shop-points-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <strong id="shop-points">0</strong> <span data-i18n="shop.available_pts">points disponibles</span>
+      </div>
+      <div class="shop-grid" id="shop-grid" role="list"></div>
+      <p class="list-empty" id="shop-empty" hidden data-i18n="reward.empty">Aucune récompense. Ajoutez-en une !</p>
+    </div>
+
+    <!-- PAGE: STATS -->
+    <div class="page" id="page-stats">
+      <div class="page-header">
+        <h1 data-i18n="page.stats.title">Statistiques</h1>
+        <p class="page-sub" data-i18n="page.stats.sub">Visualisez votre progression dans le temps.</p>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><p class="stat-card-label" data-i18n="stats.total_habits">Total habitudes</p><p class="stat-card-value" id="stat-total">0</p></div>
+        <div class="stat-card"><p class="stat-card-label" data-i18n="stats.best_streak">Meilleure série</p><p class="stat-card-value" id="stat-streak">0</p></div>
+        <div class="stat-card"><p class="stat-card-label" data-i18n="stats.completion">Taux de complétion</p><p class="stat-card-value" id="stat-rate">0%</p></div>
+        <div class="stat-card"><p class="stat-card-label" data-i18n="stats.active_days">Jours actifs</p><p class="stat-card-value" id="stat-days">0</p></div>
+      </div>
+      <div class="chart-card">
+        <h2 data-i18n="stats.chart_title">Taux de complétion — 30 derniers jours</h2>
+        <canvas id="completion-chart" width="800" height="200" aria-label="Graphique de complétion 30 jours"></canvas>
+      </div>
+    </div>
+
+    <!-- PAGE: POMODORO -->
+    <div class="page" id="page-pomodoro">
+      <div class="page-header">
+        <h1 data-i18n="page.pomodoro.title">Pomodoro</h1>
+        <p class="page-sub" data-i18n="page.pomodoro.sub">Sessions de focus avec pauses guidées.</p>
+      </div>
+      <div class="pomo-center">
+        <div class="pomo-mode-tabs" role="tablist">
+          <button class="tab active" role="tab" id="tab-focus" data-mode="focus" aria-selected="true" data-i18n="pomo.focus">Focus</button>
+          <button class="tab" role="tab" id="tab-break" data-mode="break" aria-selected="false" data-i18n="pomo.break">Pause courte</button>
+          <button class="tab" role="tab" id="tab-long" data-mode="long" aria-selected="false" data-i18n="pomo.long">Pause longue</button>
+        </div>
+        <div class="pomo-ring" role="timer" aria-live="polite" aria-label="Minuteur Pomodoro">
+          <svg viewBox="0 0 200 200">
+            <circle class="ring-track" cx="100" cy="100" r="85"/>
+            <circle class="ring-fill pomo-ring-fill" id="pomo-ring" cx="100" cy="100" r="85" stroke-dasharray="534" stroke-dashoffset="0"/>
+          </svg>
+          <div class="pomo-time-display">
+            <span class="pomo-time" id="pomo-time">25:00</span>
+            <span class="pomo-label" id="pomo-label" data-i18n="pomo.focus">Focus</span>
+          </div>
+        </div>
+        <div class="pomo-controls">
+          <button class="pomo-btn" id="pomo-reset" aria-label="Réinitialiser">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          </button>
+          <button class="pomo-btn pomo-btn--main" id="pomo-toggle" aria-label="Démarrer le minuteur">
+            <svg id="pomo-icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <svg id="pomo-icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" hidden><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+          <button class="pomo-btn" id="pomo-skip" aria-label="Passer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
+          </button>
+        </div>
+        <p class="pomo-sessions"><span data-i18n="pomo.sessions">Sessions complétées :</span> <strong id="pomo-count">0</strong></p>
+      </div>
+    </div>
+
+    <!-- PAGE: PLANNING -->
+    <div class="page" id="page-planning">
+      <div class="page-header">
+        <div>
+          <h1 data-i18n="page.planning.title">Planning</h1>
+          <p class="page-sub" data-i18n="page.planning.sub">Organisez votre semaine.</p>
+        </div>
+        <button class="btn btn-primary btn-sm" id="btn-add-plan-task" aria-haspopup="dialog">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span data-i18n="task.add">Ajouter</span>
+        </button>
+      </div>
+      <div class="planning-grid" id="planning-grid" role="grid" aria-label="Planning hebdomadaire"></div>
+    </div>
+
+  </main>
+
+  <!-- ── MODAL: ADD HABIT ─────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-add-habit" role="dialog" aria-modal="true" aria-labelledby="habit-modal-title" hidden>
+    <div class="modal">
+      <button class="modal-close" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <h2 id="habit-modal-title" data-i18n="modal.habit.title">Nouvelle habitude</h2>
+      <form id="form-add-habit" novalidate>
+        <div class="form-group"><label for="habit-name" data-i18n="form.name">Nom</label><input type="text" id="habit-name" required placeholder="Ex : Méditation" /></div>
+        <div class="form-group">
+          <label for="habit-freq" data-i18n="form.frequency">Fréquence</label>
+          <select id="habit-freq">
+            <option value="daily" data-i18n="filter.daily">Quotidienne</option>
+            <option value="weekly" data-i18n="filter.weekly">Hebdomadaire</option>
+            <option value="monthly" data-i18n="filter.monthly">Mensuelle</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-full" data-i18n="modal.habit.cta">Créer l'habitude</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── MODAL: ADD TASK ──────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-add-task" role="dialog" aria-modal="true" aria-labelledby="task-modal-title" hidden>
+    <div class="modal">
+      <button class="modal-close" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <h2 id="task-modal-title" data-i18n="modal.task.title">Nouvelle tâche</h2>
+      <form id="form-add-task" novalidate>
+        <div class="form-group"><label for="task-name" data-i18n="form.name">Nom</label><input type="text" id="task-name" required placeholder="Ex : Préparer la réunion" /></div>
+        <div class="form-group"><label for="task-date" data-i18n="form.due_date">Échéance</label><input type="date" id="task-date" /></div>
+        <div class="form-group">
+          <label for="task-priority" data-i18n="form.priority">Priorité</label>
+          <select id="task-priority">
+            <option value="high" data-i18n="priority.high">Haute</option>
+            <option value="medium" selected data-i18n="priority.medium">Moyenne</option>
+            <option value="low" data-i18n="priority.low">Basse</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary w-full" data-i18n="modal.task.cta">Créer la tâche</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── MODAL: ADD REWARD ────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-add-reward" role="dialog" aria-modal="true" aria-labelledby="reward-modal-title" hidden>
+    <div class="modal">
+      <button class="modal-close" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      <h2 id="reward-modal-title" data-i18n="modal.reward.title">Nouvelle récompense</h2>
+      <form id="form-add-reward" novalidate>
+        <div class="form-group"><label for="reward-name" data-i18n="form.name">Nom</label><input type="text" id="reward-name" required placeholder="Ex : Séance cinéma" /></div>
+        <div class="form-group"><label for="reward-desc" data-i18n="form.description">Description</label><input type="text" id="reward-desc" placeholder="Description optionnelle" /></div>
+        <div class="form-group"><label for="reward-cost" data-i18n="form.cost">Coût (points)</label><input type="number" id="reward-cost" min="1" value="50" required /></div>
+        <button type="submit" class="btn btn-primary w-full" data-i18n="modal.reward.cta">Créer la récompense</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="index.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
