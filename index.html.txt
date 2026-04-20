@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flow — Organise ta discipline.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --indigo:#5B5BD6; --indigo-light:#7B7CF0; --indigo-dim:rgba(91,91,214,0.15); --indigo-glow:rgba(91,91,214,0.35); }
+    [data-theme="dark"] { --bg:#0A0A0F; --bg2:#111118; --bg3:#18181F; --bg4:#1E1E28; --border:rgba(255,255,255,0.07); --text:#F0F0F5; --text2:#9090A8; --text3:#5A5A70; --success:#34D399; --warn:#FBBF24; }
+    *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+    ::-webkit-scrollbar { width:4px; } ::-webkit-scrollbar-thumb { background:var(--border); border-radius:99px; }
+
+    /* NAVBAR */
+    .navbar { position:fixed; top:0; left:0; right:0; height:60px; background:rgba(10,10,15,0.85); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 clamp(16px,5vw,56px); z-index:400; }
+    .nav-logo { font-size:15px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--indigo); text-decoration:none; }
+    .nav-logo span { color:var(--text); }
+    .nav-right { display:flex; align-items:center; gap:8px; }
+
+    /* BUTTONS */
+    .btn { display:inline-flex; align-items:center; justify-content:center; gap:7px; font-family:'DM Sans',sans-serif; font-weight:600; border:none; border-radius:10px; cursor:pointer; transition:all 0.15s; text-decoration:none; white-space:nowrap; }
+    .btn-ghost { background:transparent; color:var(--text2); padding:8px 14px; font-size:13px; }
+    .btn-ghost:hover { background:var(--bg3); color:var(--text); }
+    .btn-outline { background:transparent; color:var(--text); padding:10px 20px; font-size:14px; border:1px solid var(--border); border-radius:10px; }
+    .btn-outline:hover { border-color:var(--indigo); color:var(--indigo-light); }
+    .btn-primary { background:var(--indigo); color:#fff; padding:10px 22px; font-size:14px; box-shadow:0 2px 16px var(--indigo-glow); }
+    .btn-primary:hover { background:var(--indigo-light); transform:translateY(-1px); box-shadow:0 4px 24px var(--indigo-glow); }
+    .btn-primary:active { transform:translateY(0); }
+    .btn-lg { padding:13px 32px; font-size:15px; border-radius:12px; }
+
+    /* LANG PICKER */
+    .lang-picker { position:relative; }
+    .lang-btn { display:flex; align-items:center; gap:6px; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:6px 10px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; color:var(--text2); cursor:pointer; transition:all 0.15s; }
+    .lang-btn:hover { border-color:var(--indigo); color:var(--indigo-light); }
+    .lang-dropdown { position:absolute; top:calc(100% + 8px); right:0; background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:6px; min-width:160px; z-index:600; box-shadow:0 8px 32px rgba(0,0,0,0.4); opacity:0; transform:translateY(-4px); pointer-events:none; transition:opacity 0.15s,transform 0.15s; }
+    .lang-dropdown.open { opacity:1; transform:translateY(0); pointer-events:all; }
+    .lang-option { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px; cursor:pointer; font-size:13px; font-weight:500; color:var(--text2); transition:all 0.12s; }
+    .lang-option:hover { background:var(--bg3); color:var(--text); }
+    .lang-option.active { color:var(--indigo-light); background:var(--indigo-dim); }
+
+    /* HAMBURGER */
+    .hamburger { display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:4px; }
+    .hamburger span { display:block; width:20px; height:2px; background:var(--text2); border-radius:2px; transition:all 0.2s; }
+    .mobile-menu { display:none; position:fixed; top:60px; left:0; right:0; background:var(--bg2); border-bottom:1px solid var(--border); padding:16px 20px; flex-direction:column; gap:10px; z-index:399; }
+    .mobile-menu.open { display:flex; }
+    .mobile-menu .btn { width:100%; justify-content:center; }
+    .mobile-menu .lang-btn { width:100%; justify-content:space-between; }
+    .mobile-menu .lang-dropdown { position:static; opacity:1; transform:none; pointer-events:all; margin-top:6px; }
+
+    /* HERO */
+    .hero { min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:80px clamp(20px,6vw,80px) 60px; position:relative; }
+    .hero::before { content:''; position:absolute; inset:0; background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px); background-size:52px 52px; pointer-events:none; }
+    .hero::after { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 80% 60% at 50% 42%,transparent 0%,var(--bg) 75%); pointer-events:none; }
+    .hero-inner { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; }
+    .hero-badge { display:inline-flex; align-items:center; gap:7px; background:var(--indigo-dim); border:1px solid var(--indigo-glow); color:var(--indigo-light); font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:5px 14px; border-radius:99px; margin-bottom:28px; animation:fadeUp 0.5s ease both; }
+    .badge-dot { width:6px; height:6px; background:var(--indigo-light); border-radius:50%; animation:blink 2.4s ease-in-out infinite; }
+    @keyframes blink { 0%,100%{opacity:1}50%{opacity:0.25} }
+    .hero-title { font-size:clamp(34px,6.5vw,70px); font-weight:700; line-height:1.1; letter-spacing:-0.03em; color:var(--text); max-width:780px; margin-bottom:20px; animation:fadeUp 0.5s ease 0.08s both; }
+    .hero-title em { font-style:normal; color:var(--indigo-light); }
+    .hero-sub { font-size:clamp(14px,2vw,17px); color:var(--text3); font-weight:400; max-width:460px; line-height:1.75; margin-bottom:40px; animation:fadeUp 0.5s ease 0.16s both; }
+    .hero-cta { display:flex; align-items:center; gap:12px; flex-wrap:wrap; justify-content:center; animation:fadeUp 0.5s ease 0.24s both; }
+    .hero-stats { display:flex; gap:clamp(20px,4vw,48px); flex-wrap:wrap; justify-content:center; margin-top:60px; animation:fadeUp 0.5s ease 0.4s both; }
+    .hero-stat { display:flex; flex-direction:column; align-items:center; gap:4px; }
+    .hero-stat-value { font-size:22px; font-weight:700; color:var(--text); }
+    .hero-stat-label { font-size:10px; font-weight:700; color:var(--text3); letter-spacing:0.08em; text-transform:uppercase; }
+    .stat-sep { width:1px; height:32px; background:var(--border); align-self:center; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)} }
+
+    /* SECTIONS */
+    .features,.pricing { padding:clamp(60px,8vw,100px) clamp(20px,6vw,80px); max-width:1080px; margin:0 auto; }
+    .section-eyebrow { font-size:11px; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--indigo-light); text-align:center; margin-bottom:12px; }
+    .section-title { font-size:clamp(22px,3.5vw,32px); font-weight:700; text-align:center; color:var(--text); letter-spacing:-0.02em; margin-bottom:44px; line-height:1.25; }
+    .pricing-sub { text-align:center; font-size:14px; color:var(--text3); margin-top:-28px; margin-bottom:48px; }
+
+    /* FEATURES GRID */
+    .features-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; }
+    .feat-card { background:var(--bg2); border:1px solid var(--border); border-radius:16px; padding:22px 20px; transition:border-color 0.2s,transform 0.2s; }
+    .feat-card:hover { border-color:var(--indigo-glow); transform:translateY(-2px); }
+    .feat-icon { width:36px; height:36px; background:var(--indigo-dim); border:1px solid var(--indigo-glow); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:17px; margin-bottom:12px; }
+    .feat-title { font-size:13.5px; font-weight:700; color:var(--text); margin-bottom:5px; }
+    .feat-desc { font-size:12.5px; color:var(--text3); line-height:1.6; }
+
+    /* PRICING GRID */
+    .pricing-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; align-items:start; }
+    .plan-card { background:var(--bg2); border:1px solid var(--border); border-radius:20px; padding:28px 22px; transition:border-color 0.2s,transform 0.2s; position:relative; }
+    .plan-card:hover { border-color:var(--indigo-glow); transform:translateY(-3px); }
+    .plan-card.featured { border-color:var(--indigo); box-shadow:0 0 0 1px var(--indigo),0 8px 32px var(--indigo-glow); }
+    .plan-badge { position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--indigo); color:#fff; font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:3px 12px; border-radius:99px; white-space:nowrap; }
+    .plan-name { font-size:12px; font-weight:700; color:var(--text3); letter-spacing:0.06em; text-transform:uppercase; margin-bottom:12px; }
+    .plan-price { font-size:36px; font-weight:800; color:var(--text); line-height:1; margin-bottom:4px; letter-spacing:-0.03em; }
+    .plan-price sup { font-size:18px; vertical-align:super; font-weight:700; }
+    .plan-period { font-size:12px; color:var(--text3); font-weight:500; margin-bottom:22px; }
+    .plan-features { list-style:none; margin-bottom:24px; display:flex; flex-direction:column; gap:9px; }
+    .plan-features li { font-size:12.5px; color:var(--text2); display:flex; align-items:flex-start; gap:8px; }
+    .plan-features li::before { content:'✓'; color:var(--indigo-light); font-weight:700; flex-shrink:0; margin-top:1px; }
+    .plan-cta { width:100%; padding:11px; font-family:'DM Sans',sans-serif; font-size:13.5px; font-weight:700; border-radius:10px; border:none; cursor:pointer; transition:all 0.15s; }
+    .plan-cta-primary { background:var(--indigo); color:#fff; box-shadow:0 2px 12px var(--indigo-glow); }
+    .plan-cta-primary:hover { background:var(--indigo-light); transform:translateY(-1px); }
+    .plan-cta-outline { background:transparent; color:var(--text); border:1px solid var(--border) !important; }
+    .plan-cta-outline:hover { border-color:var(--indigo) !important; color:var(--indigo-light); }
+    .plan-stripe-note { text-align:center; font-size:11px; color:var(--text3); margin-top:10px; }
+
+    /* FOOTER */
+    .footer { border-top:1px solid var(--border); padding:24px clamp(20px,5vw,56px); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+    .footer-logo { font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--indigo); }
+    .footer-logo span { color:var(--text3); }
+    .footer-note { font-size:12px; color:var(--text3); }
+
+    /* MODALS */
+    .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.65); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); z-index:900; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity 0.2s; }
+    .modal-overlay.show { opacity:1; pointer-events:all; }
+    .modal { background:var(--bg2); border:1px solid var(--border); border-radius:20px; padding:32px 28px; width:100%; max-width:400px; position:relative; transform:translateY(16px) scale(0.98); transition:transform 0.25s cubic-bezier(.34,1.56,.64,1); box-shadow:0 24px 80px rgba(0,0,0,0.5); }
+    .modal-overlay.show .modal { transform:translateY(0) scale(1); }
+    .modal-close { position:absolute; top:14px; right:14px; width:30px; height:30px; background:var(--bg3); border:none; border-radius:8px; color:var(--text3); font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.15s; }
+    .modal-close:hover { background:var(--bg4); color:var(--text); }
+    .modal-logo { font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--indigo); margin-bottom:6px; }
+    .modal-logo span { color:var(--text); }
+    .modal-headline { font-size:20px; font-weight:700; color:var(--text); margin-bottom:3px; }
+    .modal-sub { font-size:13px; color:var(--text3); margin-bottom:24px; }
+    .form-group { margin-bottom:13px; }
+    .form-label { display:block; font-size:11px; font-weight:600; color:var(--text3); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:5px; }
+    .form-input { width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:10px; padding:10px 13px; font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text); outline:none; transition:border 0.15s; }
+    .form-input:focus { border-color:var(--indigo); }
+    .form-input::placeholder { color:var(--text3); }
+    .form-error { font-size:12px; color:#EF4444; margin-top:14px; text-align:center; min-height:16px; }
+    .form-submit { width:100%; margin-top:16px; padding:12px; font-size:14px; border-radius:10px; }
+    .modal-switch { text-align:center; font-size:13px; color:var(--text3); margin-top:12px; }
+    .switch-link { color:var(--indigo-light); font-weight:600; cursor:pointer; text-decoration:none; }
+    .switch-link:hover { text-decoration:underline; }
+
+    /* TOAST */
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(14px); background:var(--bg2); border:1px solid var(--border); color:var(--text); padding:11px 22px; border-radius:10px; font-size:13px; font-weight:600; z-index:9999; opacity:0; transition:all 0.3s cubic-bezier(.34,1.56,.64,1); pointer-events:none; white-space:nowrap; box-shadow:0 4px 24px rgba(0,0,0,0.35); }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* RESPONSIVE */
+    @media (max-width:1050px) { .pricing-grid { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:640px) {
+      .nav-right .btn-ghost, .nav-right .btn-primary { display:none; }
+      .hamburger { display:flex; }
+      .hero-title { font-size:28px; }
+      .hero-sub { font-size:14px; }
+      .hero-cta { flex-direction:column; align-items:stretch; width:100%; }
+      .hero-cta .btn { justify-content:center; }
+      .hero-stats { gap:14px; margin-top:40px; }
+      .stat-sep { display:none; }
+      .modal { padding:22px 16px; border-radius:16px; max-width:calc(100vw - 32px); }
+      .footer { flex-direction:column; gap:8px; }
+      .pricing-grid { grid-template-columns:1fr; }
+      .features-grid { grid-template-columns:1fr 1fr; }
+    }
+    @media (max-width:400px) { .features-grid { grid-template-columns:1fr; } .hero-title { font-size:24px; } }
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="nav-logo" href="index.html">&#9670;<span> FLOW</span></a>
+  <div class="nav-right">
+    <div class="lang-picker" id="desktopLangPicker">
+      <button class="lang-btn" id="desktopLangBtn">
+        <span id="d-flag">&#127467;&#127479;</span>
+        <span id="d-label">FR</span>
+        <span style="font-size:10px;opacity:0.5;">&#9662;</span>
+      </button>
+      <div class="lang-dropdown" id="desktopLangDropdown">
+        <div class="lang-option" data-lang="fr"><span>&#127467;&#127479;</span> Fran&#231;ais</div>
+        <div class="lang-option" data-lang="en"><span>&#127468;&#127463;</span> English</div>
+        <div class="lang-option" data-lang="es"><span>&#127466;&#127480;</span> Espa&#241;ol</div>
+        <div class="lang-option" data-lang="pt"><span>&#127463;&#127479;</span> Portugu&#234;s</div>
+      </div>
+    </div>
+    <button class="btn btn-ghost" id="nav-login-btn">Se connecter</button>
+    <button class="btn btn-primary" id="nav-signup-btn">S&#39;inscrire</button>
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <div class="lang-picker" style="width:100%;">
+    <button class="lang-btn" id="mobileLangBtn" style="width:100%;justify-content:space-between;">
+      <span><span id="m-flag">&#127467;&#127479;</span> <span id="m-label">Fran&#231;ais</span></span>
+      <span style="font-size:10px;opacity:0.5;">&#9662;</span>
+    </button>
+    <div class="lang-dropdown" id="mobileLangDropdown">
+      <div class="lang-option" data-lang="fr"><span>&#127467;&#127479;</span> Fran&#231;ais</div>
+      <div class="lang-option" data-lang="en"><span>&#127468;&#127463;</span> English</div>
+      <div class="lang-option" data-lang="es"><span>&#127466;&#127480;</span> Espa&#241;ol</div>
+      <div class="lang-option" data-lang="pt"><span>&#127463;&#127479;</span> Portugu&#234;s</div>
+    </div>
+  </div>
+  <button class="btn btn-ghost" id="mob-login-btn">Se connecter</button>
+  <button class="btn btn-primary" id="mob-signup-btn">S&#39;inscrire</button>
+</div>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge"><span class="badge-dot"></span><span id="tx-badge">Productivit&#233; personnelle</span></div>
+    <h1 class="hero-title" id="tx-title">Organise ta discipline.<br>Construis ta <em>constance.</em></h1>
+    <p class="hero-sub" id="tx-sub">Habitudes, t&#226;ches et focus &#8212; r&#233;unis dans un seul syst&#232;me con&#231;u pour t&#39;aider &#224; progresser chaque jour, sans friction.</p>
+    <div class="hero-cta">
+      <button class="btn btn-primary btn-lg" id="hero-signup-btn">S&#39;inscrire gratuitement</button>
+      <button class="btn btn-outline btn-lg" id="hero-login-btn">Se connecter</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><span class="hero-stat-value">7</span><span class="hero-stat-label" id="tx-s1">Modules</span></div>
+      <div class="stat-sep"></div>
+      <div class="hero-stat"><span class="hero-stat-value">100%</span><span class="hero-stat-label" id="tx-s2">Offline</span></div>
+      <div class="stat-sep"></div>
+      <div class="hero-stat"><span class="hero-stat-value">4</span><span class="hero-stat-label" id="tx-s3">Langues</span></div>
+      <div class="stat-sep"></div>
+      <div class="hero-stat"><span class="hero-stat-value">&#8734;</span><span class="hero-stat-label" id="tx-s4">Habitudes</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="section-eyebrow" id="tx-f-eye">Ce que tu obtiens</div>
+  <h2 class="section-title" id="tx-f-title">Tout ce dont tu as besoin.<br>Rien de superflu.</h2>
+  <div class="features-grid">
+    <div class="feat-card"><div class="feat-icon">&#10763;</div><div class="feat-title" id="f1t">Suivi des habitudes</div><div class="feat-desc" id="f1d">Quotidiennes, hebdomadaires, mensuelles. Streaks, jours personnalisables et progression en temps r&#233;el.</div></div>
+    <div class="feat-card"><div class="feat-icon">&#10022;</div><div class="feat-title" id="f2t">Gestionnaire de t&#226;ches</div><div class="feat-desc" id="f2d">Vision semaine, priorit&#233;s et points. Simple, rapide, sans friction.</div></div>
+    <div class="feat-card"><div class="feat-icon">&#9719;</div><div class="feat-title" id="f3t">Timer Pomodoro</div><div class="feat-desc" id="f3d">Sessions focus avec chronom&#232;tre int&#233;gr&#233;, modes personnalisables et compteur journalier.</div></div>
+    <div class="feat-card"><div class="feat-icon">&#9638;</div><div class="feat-title" id="f4t">Planning hebdomadaire</div><div class="feat-desc" id="f4d">Calendrier type Apple Calendar avec cr&#233;neaux color&#233;s, &#233;mojis et r&#233;currence automatique.</div></div>
+    <div class="feat-card"><div class="feat-icon">&#9680;</div><div class="feat-title" id="f5t">Statistiques visuelles</div><div class="feat-desc" id="f5d">Courbe 30 jours, heatmap d&#39;activit&#233;, taux de r&#233;ussite par habitude.</div></div>
+    <div class="feat-card"><div class="feat-icon">&#9672;</div><div class="feat-title" id="f6t">Syst&#232;me de r&#233;compenses</div><div class="feat-desc" id="f6d">Gagne des points et d&#233;bloque des r&#233;compenses personnalis&#233;es pour rester motiv&#233;.</div></div>
+  </div>
+</section>
+
+<section class="pricing">
+  <div class="section-eyebrow" id="tx-p-eye">Nos offres</div>
+  <h2 class="section-title" id="tx-p-title">Choisis ton plan.</h2>
+  <p class="pricing-sub" id="tx-p-sub">Commence gratuitement, passe &#224; l&#39;abonnement quand tu es pr&#234;t.</p>
+  <div class="pricing-grid">
+    <div class="plan-card">
+      <div class="plan-name">Flow Original</div>
+      <div class="plan-price"><sup>&#8364;</sup>3.99</div>
+      <div class="plan-period" id="per-orig">/ mois</div>
+      <ul class="plan-features"><li id="o1">Toutes les fonctionnalit&#233;s de base</li><li id="o2">Habitudes illimit&#233;es</li><li id="o3">Planning hebdomadaire</li><li id="o4">Timer Pomodoro</li></ul>
+      <button class="plan-cta plan-cta-outline" id="btn-orig">Commencer</button>
+      <div class="plan-stripe-note" id="sn1">Paiement s&#233;curis&#233; &#183; Stripe</div>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-badge" id="tx-popular">&#9889; Populaire</div>
+      <div class="plan-name">Flow Pro</div>
+      <div class="plan-price"><sup>&#8364;</sup>7.99</div>
+      <div class="plan-period" id="per-pro">/ mois</div>
+      <ul class="plan-features"><li id="p1">Tout de Flow Original</li><li id="p2">Statistiques avanc&#233;es</li><li id="p3">Boutique de r&#233;compenses</li><li id="p4">Synchronisation multi-appareils</li><li id="p5">Support prioritaire</li></ul>
+      <button class="plan-cta plan-cta-primary" id="btn-pro">Commencer</button>
+      <div class="plan-stripe-note" id="sn2">Paiement s&#233;curis&#233; &#183; Stripe</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Flow Premium</div>
+      <div class="plan-price"><sup>&#8364;</sup>58.70</div>
+      <div class="plan-period" id="per-prem">/ an &#8212; &#233;conomise 37%</div>
+      <ul class="plan-features"><li id="pm1">Tout de Flow Pro</li><li id="pm2">Acc&#232;s anticip&#233; aux nouvelles fonctions</li><li id="pm3">Export de donn&#233;es</li><li id="pm4">Th&#232;mes personnalis&#233;s</li></ul>
+      <button class="plan-cta plan-cta-outline" id="btn-prem">Commencer</button>
+      <div class="plan-stripe-note" id="sn3">Paiement s&#233;curis&#233; &#183; Stripe</div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-name">Flow Life</div>
+      <div class="plan-price"><sup>&#8364;</sup>100</div>
+      <div class="plan-period" id="per-life">paiement unique &#183; &#224; vie</div>
+      <ul class="plan-features"><li id="l1">Acc&#232;s &#224; vie complet</li><li id="l2">Toutes les mises &#224; jour futures</li><li id="l3">Support VIP</li><li id="l4">Fonctions exclusives &#224; vie</li></ul>
+      <button class="plan-cta plan-cta-outline" id="btn-life">Obtenir Flow Life</button>
+      <div class="plan-stripe-note" id="sn4">Paiement s&#233;curis&#233; &#183; Stripe</div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-logo">&#9670;<span> FLOW</span></div>
+  <div class="footer-note" id="tx-footer">Con&#231;u pour la discipline personnelle &#8212; 100% local, 0 tracking.</div>
+</footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="login-modal">
+  <div class="modal">
+    <button class="modal-close" id="close-login">&#10005;</button>
+    <div class="modal-logo">&#9670;<span> FLOW</span></div>
+    <div class="modal-headline" id="tx-lh">Content de te revoir.</div>
+    <div class="modal-sub" id="tx-ls">Connecte-toi pour acc&#233;der &#224; ton espace.</div>
+    <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="login-email" type="email" placeholder="toi@exemple.com" autocomplete="email" /></div>
+    <div class="form-group"><label class="form-label" id="tx-lpw">Mot de passe</label><input class="form-input" id="login-password" type="password" placeholder="&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;&#8226;" autocomplete="current-password" /></div>
+    <div class="form-error" id="login-error"></div>
+    <button class="btn btn-primary form-submit" id="btn-login-submit">Se connecter &#8594;</button>
+    <div class="modal-switch" id="tx-lswitch">Pas encore de compte ? <span class="switch-link" id="go-signup">S&#39;inscrire</span></div>
+  </div>
+</div>
+
+<!-- SIGNUP MODAL -->
+<div class="modal-overlay" id="signup-modal">
+  <div class="modal">
+    <button class="modal-close" id="close-signup">&#10005;</button>
+    <div class="modal-logo">&#9670;<span> FLOW</span></div>
+    <div class="modal-headline" id="tx-sh">Cr&#233;e ton compte.</div>
+    <div class="modal-sub" id="tx-ss">Gratuit, sans carte bancaire, pour toujours.</div>
+    <div class="form-group"><label class="form-label">Email</label><input class="form-input" id="signup-email" type="email" placeholder="toi@exemple.com" autocomplete="email" /></div>
+    <div class="form-group"><label class="form-label" id="tx-spw">Mot de passe</label><input class="form-input" id="signup-password" type="password" placeholder="6 caract&#232;res minimum" autocomplete="new-password" /></div>
+    <div class="form-group"><label class="form-label" id="tx-scpw">Confirmer le mot de passe</label><input class="form-input" id="signup-confirm" type="password" placeholder="R&#233;p&#232;te ton mot de passe" autocomplete="new-password" /></div>
+    <div class="form-error" id="signup-error"></div>
+    <button class="btn btn-primary form-submit" id="btn-signup-submit">Cr&#233;er mon compte &#8594;</button>
+    <div class="modal-switch" id="tx-sswitch">D&#233;j&#224; un compte ? <span class="switch-link" id="go-login">Se connecter</span></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══ SCRIPT 1: i18n + UI (global scope, no module) ══════════════ -->
+<script>
+(function() {
+  // All strings use unicode escapes — zero risk of apostrophe breaking
+  var T = {
+    fr: {
+      badge:'Productivit\u00e9 personnelle',
+      title:'Organise ta discipline.<br>Construis ta <em>constance.</em>',
+      sub:'Habitudes, t\u00e2ches et focus \u2014 r\u00e9unis dans un seul syst\u00e8me con\u00e7u pour t\u2019aider \u00e0 progresser chaque jour, sans friction.',
+      cta_up:"S\u2019inscrire gratuitement", cta_in:'Se connecter',
+      nav_in:'Se connecter', nav_up:"S\u2019inscrire",
+      s1:'Modules', s2:'Offline', s3:'Langues', s4:'Habitudes',
+      fe:'Ce que tu obtiens', ft:'Tout ce dont tu as besoin.<br>Rien de superflu.',
+      f1t:'Suivi des habitudes', f1d:'Quotidiennes, hebdomadaires, mensuelles. Streaks, jours personnalisables et progression en temps r\u00e9el.',
+      f2t:'Gestionnaire de t\u00e2ches', f2d:'Vision semaine, priorit\u00e9s et points. Simple, rapide, sans friction.',
+      f3t:'Timer Pomodoro', f3d:'Sessions focus avec chronom\u00e8tre int\u00e9gr\u00e9, modes personnalisables et compteur journalier.',
+      f4t:'Planning hebdomadaire', f4d:'Calendrier type Apple Calendar avec cr\u00e9neaux color\u00e9s, \u00e9mojis et r\u00e9currence automatique.',
+      f5t:'Statistiques visuelles', f5d:"Courbe 30 jours, heatmap d\u2019activit\u00e9, taux de r\u00e9ussite par habitude.",
+      f6t:'Syst\u00e8me de r\u00e9compenses', f6d:'Gagne des points et d\u00e9bloque des r\u00e9compenses personnalis\u00e9es pour rester motiv\u00e9.',
+      pe:'Nos offres', pt:'Choisis ton plan.', ps:"Commence gratuitement, passe \u00e0 l\u2019abonnement quand tu es pr\u00eat.",
+      por_orig:'/ mois', por_pro:'/ mois', por_prem:'/ an \u2014 \u00e9conomise 37%', por_life:'paiement unique \u00b7 \u00e0 vie',
+      popular:'\u26a1 Populaire',
+      o1:'Toutes les fonctionnalit\u00e9s de base', o2:'Habitudes illimit\u00e9es', o3:'Planning hebdomadaire', o4:'Timer Pomodoro',
+      p1:'Tout de Flow Original', p2:'Statistiques avanc\u00e9es', p3:'Boutique de r\u00e9compenses', p4:'Synchronisation multi-appareils', p5:'Support prioritaire',
+      pm1:'Tout de Flow Pro', pm2:'Acc\u00e8s anticip\u00e9 aux nouvelles fonctions', pm3:'Export de donn\u00e9es', pm4:'Th\u00e8mes personnalis\u00e9s',
+      l1:'Acc\u00e8s \u00e0 vie complet', l2:'Toutes les mises \u00e0 jour futures', l3:'Support VIP', l4:'Fonctions exclusives \u00e0 vie',
+      borig:'Commencer', bpro:'Commencer', bprem:'Commencer', blife:'Obtenir Flow Life',
+      sn:'Paiement s\u00e9curis\u00e9 \u00b7 Stripe',
+      footer:'Con\u00e7u pour la discipline personnelle \u2014 100% local, 0 tracking.',
+      lh:'Content de te revoir.', ls:'Connecte-toi pour acc\u00e9der \u00e0 ton espace.',
+      sh:'Cr\u00e9e ton compte.', ss:'Gratuit, sans carte bancaire, pour toujours.',
+      lpw:'Mot de passe', spw:'Mot de passe', scpw:'Confirmer le mot de passe',
+      lswitch:"Pas encore de compte\u00a0? <span class=\"switch-link\" id=\"go-signup\">S\u2019inscrire</span>",
+      sswitch:"D\u00e9j\u00e0 un compte\u00a0? <span class=\"switch-link\" id=\"go-login\">Se connecter</span>",
+      btn_in:'Se connecter \u2192', btn_up:'Cr\u00e9er mon compte \u2192',
+      connecting:'Connexion...', creating:'Cr\u00e9ation...',
+      toast_in:'Connexion r\u00e9ussie \u2736', toast_up:'Compte cr\u00e9\u00e9 \u2736',
+      confirm:'\u2713 V\u00e9rifie ta bo\u00eete mail pour confirmer ton compte.',
+      plan_soon:'Stripe sera configur\u00e9 bient\u00f4t pour ce plan.',
+      err_fill:'Remplis tous les champs.', err_short:'Mot de passe trop court (6 caract\u00e8res minimum).', err_match:'Les mots de passe ne correspondent pas.',
+      err_cred:'Email ou mot de passe incorrect.', err_econf:'Confirme ton email avant de te connecter.',
+      err_exist:'Un compte existe d\u00e9j\u00e0 avec cet email.', err_spass:'Mot de passe trop court (6 caract\u00e8res minimum).',
+      err_email:'Adresse email invalide.', err_rate:'Trop de tentatives. R\u00e9essaie dans quelques minutes.',
+      lang_full:'Fran\u00e7ais'
+    },
+    en: {
+      badge:'Personal productivity',
+      title:'Organise your discipline.<br>Build <em>consistency.</em>',
+      sub:'Habits, tasks and focus \u2014 all in one system designed to help you progress every day, without friction.',
+      cta_up:'Sign up for free', cta_in:'Log in',
+      nav_in:'Log in', nav_up:'Sign up',
+      s1:'Modules', s2:'Offline', s3:'Languages', s4:'Habits',
+      fe:'What you get', ft:'Everything you need.<br>Nothing more.',
+      f1t:'Habit tracking', f1d:'Daily, weekly, monthly. Streaks, custom days and real-time progress.',
+      f2t:'Task manager', f2d:'Weekly view, priorities and points. Simple, fast, frictionless.',
+      f3t:'Pomodoro timer', f3d:'Focus sessions with built-in stopwatch, customisable modes and daily counter.',
+      f4t:'Weekly planning', f4d:'Apple Calendar-style planner with coloured slots, emojis and auto-recurrence.',
+      f5t:'Visual statistics', f5d:'30-day chart, activity heatmap, per-habit success rate.',
+      f6t:'Rewards system', f6d:'Earn points and unlock personalised rewards to stay motivated.',
+      pe:'Our plans', pt:'Choose your plan.', ps:"Start free, upgrade when you're ready.",
+      por_orig:'/ month', por_pro:'/ month', por_prem:'/ year \u2014 save 37%', por_life:'one-time \u00b7 lifetime',
+      popular:'\u26a1 Popular',
+      o1:'All core features', o2:'Unlimited habits', o3:'Weekly planning', o4:'Pomodoro timer',
+      p1:'Everything in Original', p2:'Advanced statistics', p3:'Rewards shop', p4:'Multi-device sync', p5:'Priority support',
+      pm1:'Everything in Pro', pm2:'Early access to new features', pm3:'Data export', pm4:'Custom themes',
+      l1:'Lifetime full access', l2:'All future updates', l3:'VIP support', l4:'Exclusive lifetime features',
+      borig:'Get started', bpro:'Get started', bprem:'Get started', blife:'Get Flow Life',
+      sn:'Secure payment \u00b7 Stripe',
+      footer:'Built for personal discipline \u2014 100% local, 0 tracking.',
+      lh:'Welcome back.', ls:'Log in to access your space.',
+      sh:'Create your account.', ss:'Free, no credit card, forever.',
+      lpw:'Password', spw:'Password', scpw:'Confirm password',
+      lswitch:'No account yet? <span class="switch-link" id="go-signup">Sign up</span>',
+      sswitch:'Already have an account? <span class="switch-link" id="go-login">Log in</span>',
+      btn_in:'Log in \u2192', btn_up:'Create account \u2192',
+      connecting:'Logging in...', creating:'Creating...',
+      toast_in:'Logged in \u2736', toast_up:'Account created \u2736',
+      confirm:'\u2713 Check your email to confirm your account.',
+      plan_soon:'Stripe coming soon for this plan.',
+      err_fill:'Please fill in all fields.', err_short:'Password too short (6 characters minimum).', err_match:'Passwords do not match.',
+      err_cred:'Invalid email or password.', err_econf:'Please confirm your email before logging in.',
+      err_exist:'An account already exists with this email.', err_spass:'Password too short (6 characters minimum).',
+      err_email:'Invalid email address.', err_rate:'Too many attempts. Please try again in a few minutes.',
+      lang_full:'English'
+    },
+    es: {
+      badge:'Productividad personal',
+      title:'Organiza tu disciplina.<br>Construye tu <em>constancia.</em>',
+      sub:'H\u00e1bitos, tareas y enfoque \u2014 todo en un solo sistema dise\u00f1ado para ayudarte a progresar cada d\u00eda, sin fricci\u00f3n.',
+      cta_up:'Registrarse gratis', cta_in:'Iniciar sesi\u00f3n',
+      nav_in:'Iniciar sesi\u00f3n', nav_up:'Registrarse',
+      s1:'M\u00f3dulos', s2:'Offline', s3:'Idiomas', s4:'H\u00e1bitos',
+      fe:'Lo que obtienes', ft:'Todo lo que necesitas.<br>Nada m\u00e1s.',
+      f1t:'Seguimiento de h\u00e1bitos', f1d:'Diarios, semanales, mensuales. Rachas, d\u00edas personalizables y progreso en tiempo real.',
+      f2t:'Gestor de tareas', f2d:'Vista semanal, prioridades y puntos. Simple, r\u00e1pido, sin fricci\u00f3n.',
+      f3t:'Temporizador Pomodoro', f3d:'Sesiones de enfoque con cron\u00f3metro integrado, modos personalizables y contador diario.',
+      f4t:'Planificaci\u00f3n semanal', f4d:'Planificador estilo Apple Calendar con espacios de colores, emojis y recurrencia autom\u00e1tica.',
+      f5t:'Estad\u00edsticas visuales', f5d:'Gr\u00e1fico 30 d\u00edas, mapa de calor de actividad, tasa de \u00e9xito por h\u00e1bito.',
+      f6t:'Sistema de recompensas', f6d:'Gana puntos y desbloquea recompensas personalizadas para mantenerte motivado.',
+      pe:'Nuestros planes', pt:'Elige tu plan.', ps:'Empieza gratis, pasa a premium cuando est\u00e9s listo.',
+      por_orig:'/ mes', por_pro:'/ mes', por_prem:'/ a\u00f1o \u2014 ahorra 37%', por_life:'pago \u00fanico \u00b7 de por vida',
+      popular:'\u26a1 Popular',
+      o1:'Todas las funciones b\u00e1sicas', o2:'H\u00e1bitos ilimitados', o3:'Planificaci\u00f3n semanal', o4:'Temporizador Pomodoro',
+      p1:'Todo de Flow Original', p2:'Estad\u00edsticas avanzadas', p3:'Tienda de recompensas', p4:'Sincronizaci\u00f3n multi-dispositivo', p5:'Soporte prioritario',
+      pm1:'Todo de Flow Pro', pm2:'Acceso anticipado', pm3:'Exportaci\u00f3n de datos', pm4:'Temas personalizados',
+      l1:'Acceso completo de por vida', l2:'Todas las actualizaciones futuras', l3:'Soporte VIP', l4:'Funciones exclusivas de por vida',
+      borig:'Empezar', bpro:'Empezar', bprem:'Empezar', blife:'Obtener Flow Life',
+      sn:'Pago seguro \u00b7 Stripe',
+      footer:'Dise\u00f1ado para la disciplina personal \u2014 100% local, sin rastreo.',
+      lh:'Bienvenido de nuevo.', ls:'Inicia sesi\u00f3n para acceder a tu espacio.',
+      sh:'Crea tu cuenta.', ss:'Gratis, sin tarjeta de cr\u00e9dito, para siempre.',
+      lpw:'Contrase\u00f1a', spw:'Contrase\u00f1a', scpw:'Confirmar contrase\u00f1a',
+      lswitch:'\u00bfNo tienes cuenta? <span class="switch-link" id="go-signup">Registrarse</span>',
+      sswitch:'\u00bfYa tienes cuenta? <span class="switch-link" id="go-login">Iniciar sesi\u00f3n</span>',
+      btn_in:'Iniciar sesi\u00f3n \u2192', btn_up:'Crear cuenta \u2192',
+      connecting:'Conectando...', creating:'Creando...',
+      toast_in:'Sesi\u00f3n iniciada \u2736', toast_up:'Cuenta creada \u2736',
+      confirm:'\u2713 Revisa tu correo para confirmar tu cuenta.',
+      plan_soon:'Stripe se configurar\u00e1 pronto para este plan.',
+      err_fill:'Rellena todos los campos.', err_short:'Contrase\u00f1a demasiado corta (m\u00edn. 6 caracteres).', err_match:'Las contrase\u00f1as no coinciden.',
+      err_cred:'Correo o contrase\u00f1a incorrectos.', err_econf:'Confirma tu correo antes de iniciar sesi\u00f3n.',
+      err_exist:'Ya existe una cuenta con este correo.', err_spass:'Contrase\u00f1a demasiado corta (m\u00edn. 6 caracteres).',
+      err_email:'Direcci\u00f3n de correo inv\u00e1lida.', err_rate:'Demasiados intentos. Inténtalo de nuevo en unos minutos.',
+      lang_full:'Espa\u00f1ol'
+    },
+    pt: {
+      badge:'Produtividade pessoal',
+      title:'Organize sua disciplina.<br>Construa sua <em>consist\u00eancia.</em>',
+      sub:'H\u00e1bitos, tarefas e foco \u2014 tudo em um s\u00f3 sistema para te ajudar a progredir cada dia, sem fric\u00e7\u00e3o.',
+      cta_up:'Cadastrar gr\u00e1tis', cta_in:'Entrar',
+      nav_in:'Entrar', nav_up:'Cadastrar',
+      s1:'M\u00f3dulos', s2:'Offline', s3:'Idiomas', s4:'H\u00e1bitos',
+      fe:'O que voc\u00ea recebe', ft:'Tudo o que voc\u00ea precisa.<br>Nada al\u00e9m disso.',
+      f1t:'Rastreamento de h\u00e1bitos', f1d:'Di\u00e1rios, semanais, mensais. Sequ\u00eancias, dias personaliz\u00e1veis e progresso em tempo real.',
+      f2t:'Gerenciador de tarefas', f2d:'Vis\u00e3o semanal, prioridades e pontos. Simples, r\u00e1pido, sem fric\u00e7\u00e3o.',
+      f3t:'Temporizador Pomodoro', f3d:'Sess\u00f5es de foco com cron\u00f4metro integrado, modos personaliz\u00e1veis e contador di\u00e1rio.',
+      f4t:'Planejamento semanal', f4d:'Planejador estilo Apple Calendar com slots coloridos, emojis e recorr\u00eancia autom\u00e1tica.',
+      f5t:'Estat\u00edsticas visuais', f5d:'Gr\u00e1fico 30 dias, mapa de calor de atividade, taxa de sucesso por h\u00e1bito.',
+      f6t:'Sistema de recompensas', f6d:'Ganhe pontos e desbloqueie recompensas personalizadas para se manter motivado.',
+      pe:'Nossos planos', pt:'Escolha seu plano.', ps:'Comece gr\u00e1tis, assine quando estiver pronto.',
+      por_orig:'/ m\u00eas', por_pro:'/ m\u00eas', por_prem:'/ ano \u2014 economize 37%', por_life:'pagamento \u00fanico \u00b7 vitalício',
+      popular:'\u26a1 Popular',
+      o1:'Todas as fun\u00e7\u00f5es b\u00e1sicas', o2:'H\u00e1bitos ilimitados', o3:'Planejamento semanal', o4:'Temporizador Pomodoro',
+      p1:'Tudo do Flow Original', p2:'Estat\u00edsticas avan\u00e7adas', p3:'Loja de recompensas', p4:'Sincroniza\u00e7\u00e3o multi-dispositivo', p5:'Suporte priorit\u00e1rio',
+      pm1:'Tudo do Flow Pro', pm2:'Acesso antecipado', pm3:'Exporta\u00e7\u00e3o de dados', pm4:'Temas personalizados',
+      l1:'Acesso completo vitalício', l2:'Todas as atualiza\u00e7\u00f5es futuras', l3:'Suporte VIP', l4:'Fun\u00e7\u00f5es exclusivas vitalícias',
+      borig:'Come\u00e7ar', bpro:'Come\u00e7ar', bprem:'Come\u00e7ar', blife:'Obter Flow Life',
+      sn:'Pagamento seguro \u00b7 Stripe',
+      footer:'Desenvolvido para disciplina pessoal \u2014 100% local, sem rastreamento.',
+      lh:'Bem-vindo de volta.', ls:'Entre para acessar seu espa\u00e7o.',
+      sh:'Crie sua conta.', ss:'Gr\u00e1tis, sem cart\u00e3o de cr\u00e9dito, para sempre.',
+      lpw:'Senha', spw:'Senha', scpw:'Confirmar senha',
+      lswitch:'N\u00e3o tem conta? <span class="switch-link" id="go-signup">Cadastrar</span>',
+      sswitch:'J\u00e1 tem conta? <span class="switch-link" id="go-login">Entrar</span>',
+      btn_in:'Entrar \u2192', btn_up:'Criar conta \u2192',
+      connecting:'Entrando...', creating:'Criando...',
+      toast_in:'Login realizado \u2736', toast_up:'Conta criada \u2736',
+      confirm:'\u2713 Verifique seu e-mail para confirmar sua conta.',
+      plan_soon:'O Stripe ser\u00e1 configurado em breve para este plano.',
+      err_fill:'Preencha todos os campos.', err_short:'Senha muito curta (m\u00edn. 6 caracteres).', err_match:'As senhas n\u00e3o coincidem.',
+      err_cred:'E-mail ou senha incorretos.', err_econf:'Confirme seu e-mail antes de entrar.',
+      err_exist:'J\u00e1 existe uma conta com este e-mail.', err_spass:'Senha muito curta (m\u00edn. 6 caracteres).',
+      err_email:'Endere\u00e7o de e-mail inv\u00e1lido.', err_rate:'Muitas tentativas. Tente novamente em alguns minutos.',
+      lang_full:'Portugu\u00eas'
+    }
+  };
+
+  var FLAGS = { fr:'\uD83C\uDDEB\uD83C\uDDF7', en:'\uD83C\uDDEC\uD83C\uDDE7', es:'\uD83C\uDDEA\uD83C\uDDF8', pt:'\uD83C\uDDE7\uD83C\uDDF7' };
+  var SHORT = { fr:'FR', en:'EN', es:'ES', pt:'PT' };
+
+  var lang = localStorage.getItem('flow_lang') || 'fr';
+
+  // Expose t() globally so module script can use it
+  window.t = function(k) { return (T[lang] && T[lang][k]) || (T.fr[k]) || k; };
+
+  function set(id, val, html) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (html) { el.innerHTML = val; } else { el.textContent = val; }
+  }
+
+  function applyLang() {
+    document.documentElement.lang = lang;
+    var l = T[lang];
+    // Hero
+    set('tx-badge', l.badge);
+    set('tx-title', l.title, true);
+    set('tx-sub', l.sub);
+    set('hero-signup-btn', l.cta_up);
+    set('hero-login-btn', l.cta_in);
+    set('tx-s1', l.s1); set('tx-s2', l.s2); set('tx-s3', l.s3); set('tx-s4', l.s4);
+    // Features
+    set('tx-f-eye', l.fe); set('tx-f-title', l.ft, true);
+    for (var i=1;i<=6;i++) { set('f'+i+'t', l['f'+i+'t']); set('f'+i+'d', l['f'+i+'d']); }
+    // Pricing
+    set('tx-p-eye', l.pe); set('tx-p-title', l.pt, true); set('tx-p-sub', l.ps);
+    set('per-orig', l.por_orig); set('per-pro', l.por_pro); set('per-prem', l.por_prem); set('per-life', l.por_life);
+    set('tx-popular', l.popular);
+    set('o1',l.o1); set('o2',l.o2); set('o3',l.o3); set('o4',l.o4);
+    set('p1',l.p1); set('p2',l.p2); set('p3',l.p3); set('p4',l.p4); set('p5',l.p5);
+    set('pm1',l.pm1); set('pm2',l.pm2); set('pm3',l.pm3); set('pm4',l.pm4);
+    set('l1',l.l1); set('l2',l.l2); set('l3',l.l3); set('l4',l.l4);
+    set('btn-orig',l.borig); set('btn-pro',l.bpro); set('btn-prem',l.bprem); set('btn-life',l.blife);
+    set('sn1',l.sn); set('sn2',l.sn); set('sn3',l.sn); set('sn4',l.sn);
+    // Footer
+    set('tx-footer', l.footer);
+    // Modals
+    set('tx-lh', l.lh); set('tx-ls', l.ls);
+    set('tx-sh', l.sh); set('tx-ss', l.ss);
+    set('tx-lpw', l.lpw); set('tx-spw', l.spw); set('tx-scpw', l.scpw);
+    set('tx-lswitch', l.lswitch, true); set('tx-sswitch', l.sswitch, true);
+    set('btn-login-submit', l.btn_in); set('btn-signup-submit', l.btn_up);
+    // Nav buttons
+    set('nav-login-btn', l.nav_in); set('nav-signup-btn', l.nav_up);
+    set('mob-login-btn', l.nav_in); set('mob-signup-btn', l.nav_up);
+    // Lang picker display
+    set('d-flag', FLAGS[lang]); set('d-label', SHORT[lang]);
+    set('m-flag', FLAGS[lang]); set('m-label', l.lang_full);
+    // Active markers
+    document.querySelectorAll('.lang-option').forEach(function(o) {
+      o.classList.toggle('active', o.getAttribute('data-lang') === lang);
+    });
+    // Rebind modal switches (innerHTML changed)
+    bindSwitches();
+  }
+
+  window.setLang = function(l) {
+    lang = l;
+    localStorage.setItem('flow_lang', l);
+    applyLang();
+    closeAll();
+  };
+
+  // ── DROPDOWN ────────────────────────────────────────────────────
+  function toggleDD(id) {
+    var el = document.getElementById(id);
+    var wasOpen = el.classList.contains('open');
+    closeAll();
+    if (!wasOpen) el.classList.add('open');
+  }
+  function closeAll() {
+    document.querySelectorAll('.lang-dropdown').forEach(function(d){ d.classList.remove('open'); });
+    document.getElementById('mobileMenu').classList.remove('open');
+  }
+
+  // ── MOBILE MENU ─────────────────────────────────────────────────
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+  // ── MODALS ──────────────────────────────────────────────────────
+  window.openModal = function(id) {
+    document.getElementById(id).classList.add('show');
+    document.body.style.overflow = 'hidden';
+    var errId = (id === 'login-modal') ? 'login-error' : 'signup-error';
+    var e = document.getElementById(errId);
+    if (e) { e.textContent = ''; e.style.color = '#EF4444'; }
+  };
+  window.closeModal = function(id) {
+    document.getElementById(id).classList.remove('show');
+    document.body.style.overflow = '';
+  };
+
+  function bindSwitches() {
+    var gs = document.getElementById('go-signup');
+    if (gs) gs.onclick = function() { window.closeModal('login-modal'); setTimeout(function(){ window.openModal('signup-modal'); }, 160); };
+    var gl = document.getElementById('go-login');
+    if (gl) gl.onclick = function() { window.closeModal('signup-modal'); setTimeout(function(){ window.openModal('login-modal'); }, 160); };
+  }
+
+  // ── TOAST ───────────────────────────────────────────────────────
+  var toastTimer;
+  window.showToast = function(msg) {
+    var el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ el.classList.remove('show'); }, 2800);
+  };
+
+  // ── INIT ────────────────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    applyLang();
+
+    // Desktop lang picker
+    document.getElementById('desktopLangBtn').addEventListener('click', function(e) {
+      e.stopPropagation(); toggleDD('desktopLangDropdown');
+    });
+    // Mobile lang picker
+    document.getElementById('mobileLangBtn').addEventListener('click', function(e) {
+      e.stopPropagation(); toggleDD('mobileLangDropdown');
+    });
+    // All lang options
+    document.querySelectorAll('.lang-option').forEach(function(opt) {
+      opt.addEventListener('click', function() { window.setLang(opt.getAttribute('data-lang')); });
+    });
+    // Hamburger
+    document.getElementById('hamburgerBtn').addEventListener('click', function(e) {
+      e.stopPropagation(); toggleMenu();
+    });
+    // Nav buttons
+    document.getElementById('nav-login-btn').addEventListener('click', function() { window.openModal('login-modal'); });
+    document.getElementById('nav-signup-btn').addEventListener('click', function() { window.openModal('signup-modal'); });
+    document.getElementById('mob-login-btn').addEventListener('click', function() { closeAll(); window.openModal('login-modal'); });
+    document.getElementById('mob-signup-btn').addEventListener('click', function() { closeAll(); window.openModal('signup-modal'); });
+    document.getElementById('hero-signup-btn').addEventListener('click', function() { window.openModal('signup-modal'); });
+    document.getElementById('hero-login-btn').addEventListener('click', function() { window.openModal('login-modal'); });
+    // Plan buttons
+    ['orig','pro','prem','life'].forEach(function(p) {
+      document.getElementById('btn-'+p).addEventListener('click', function() { window.showToast(window.t('plan_soon')); });
+    });
+    // Modal close
+    document.getElementById('close-login').addEventListener('click', function() { window.closeModal('login-modal'); });
+    document.getElementById('close-signup').addEventListener('click', function() { window.closeModal('signup-modal'); });
+    document.getElementById('login-modal').addEventListener('click', function(e) { if(e.target===this) window.closeModal('login-modal'); });
+    document.getElementById('signup-modal').addEventListener('click', function(e) { if(e.target===this) window.closeModal('signup-modal'); });
+    // Enter key
+    document.getElementById('login-password').addEventListener('keydown', function(e) { if(e.key==='Enter' && window.handleLogin) window.handleLogin(); });
+    document.getElementById('signup-confirm').addEventListener('keydown', function(e) { if(e.key==='Enter' && window.handleSignup) window.handleSignup(); });
+    // Outside click
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#desktopLangPicker') && !e.target.closest('.mobile-menu .lang-picker')) {
+        document.querySelectorAll('.lang-dropdown').forEach(function(d){ d.classList.remove('open'); });
+      }
+      if (!e.target.closest('#mobileMenu') && !e.target.closest('#hamburgerBtn')) {
+        document.getElementById('mobileMenu').classList.remove('open');
+      }
+    });
+    // Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.show').forEach(function(m){ window.closeModal(m.id); });
+        closeAll();
+      }
+    });
+  });
+})();
+</script>
+
+<!-- ═══ SCRIPT 2: Supabase auth (module, isolated scope) ══════════ -->
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const SUPABASE_URL = 'https://kawltcvazlzkiacdbdka.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_g-FoawX8KXLqSTpRmHH_Rg_uvMNq6Lg';
+  const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Already logged in? Go to app
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) { window.location.replace('app.html'); }
+
+  function mapErr(msg) {
+    if (msg.includes('Invalid login credentials'))  return window.t('err_cred');
+    if (msg.includes('Email not confirmed'))         return window.t('err_econf');
+    if (msg.includes('User already registered'))     return window.t('err_exist');
+    if (msg.includes('Password should be at least')) return window.t('err_spass');
+    if (msg.includes('Unable to validate email'))    return window.t('err_email');
+    if (msg.includes('rate limit'))                  return window.t('err_rate');
+    return msg;
+  }
+
+  window.handleLogin = async function() {
+    const email = document.getElementById('login-email').value.trim();
+    const pass  = document.getElementById('login-password').value;
+    const err   = document.getElementById('login-error');
+    const btn   = document.getElementById('btn-login-submit');
+    if (!email || !pass) { err.textContent = window.t('err_fill'); return; }
+    btn.textContent = window.t('connecting'); btn.disabled = true;
+    const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+    if (error) {
+      err.textContent = mapErr(error.message);
+      btn.textContent = window.t('btn_in'); btn.disabled = false; return;
+    }
+    window.closeModal('login-modal');
+    window.showToast(window.t('toast_in'));
+    setTimeout(() => { window.location.href = 'app.html'; }, 700);
+  };
+
+  window.handleSignup = async function() {
+    const email   = document.getElementById('signup-email').value.trim();
+    const pass    = document.getElementById('signup-password').value;
+    const confirm = document.getElementById('signup-confirm').value;
+    const err     = document.getElementById('signup-error');
+    const btn     = document.getElementById('btn-signup-submit');
+    if (!email || !pass || !confirm) { err.textContent = window.t('err_fill'); return; }
+    if (pass.length < 6)             { err.textContent = window.t('err_short'); return; }
+    if (pass !== confirm)            { err.textContent = window.t('err_match'); return; }
+    btn.textContent = window.t('creating'); btn.disabled = true;
+    const { error } = await sb.auth.signUp({ email, password: pass });
+    if (error) {
+      err.textContent = mapErr(error.message);
+      btn.textContent = window.t('btn_up'); btn.disabled = false; return;
+    }
+    const { data: { session: s2 } } = await sb.auth.getSession();
+    if (s2) {
+      window.closeModal('signup-modal');
+      window.showToast(window.t('toast_up'));
+      setTimeout(() => { window.location.href = 'app.html'; }, 700);
+    } else {
+      btn.textContent = window.t('btn_up'); btn.disabled = false;
+      err.style.color = '#34D399';
+      err.textContent = window.t('confirm');
+    }
+  };
+
+  // Bind submit buttons (module executes after DOM is ready)
+  document.getElementById('btn-login-submit').addEventListener('click', () => window.handleLogin());
+  document.getElementById('btn-signup-submit').addEventListener('click', () => window.handleSignup());
+</script>
+
+</body>
+</html>
